@@ -165,27 +165,26 @@ nav.s{
 .sbod{font-size:17px;color:var(--g600);line-height:1.7;max-width:520px}
 
 /* ════════════════════════════════════════
-   DEMING – Dunkelblau statt Schwarz
+   QUOTE SECTION – Deming 60% / Humby 40%
 ════════════════════════════════════════ */
-#deming{
+#quote-section{
   padding:var(--s12) var(--mx);
   background:var(--navy);
   position:relative;overflow:hidden;
 }
-#deming::before{
+#quote-section::before{
   content:'';position:absolute;inset:0;
   background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
     linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
   background-size:64px 64px;pointer-events:none;
 }
-.dem-inner{max-width:var(--mw);margin:0 auto;text-align:center;position:relative;z-index:1}
-.dem-q{
+.q-inner{max-width:var(--mw);margin:0 auto;text-align:center;position:relative;z-index:1}
+.q-text{
   font-size:clamp(28px,4.5vw,52px);font-weight:300;font-style:italic;
   line-height:1.35;color:rgba(255,255,255,.88);margin-bottom:var(--s8);
   letter-spacing:-.02em;position:relative;
 }
-/* Typografisches Einzel-Anführungszeichen */
-.dem-q::before{
+.q-text::before{
   content:'\201E';
   font-size:clamp(80px,12vw,140px);
   font-weight:800;font-style:normal;
@@ -196,14 +195,17 @@ nav.s{
   font-family:Georgia,'Times New Roman',serif;
   letter-spacing:0;
 }
-.dem-q strong{font-weight:800;font-style:normal;color:#fff}
-.dem-attr{display:flex;align-items:center;justify-content:center;gap:var(--s3)}
-.dem-img{
+.q-text strong{font-weight:800;font-style:normal;color:#fff}
+.q-attr{display:flex;align-items:center;justify-content:center;gap:var(--s3)}
+.q-img{
   width:72px;height:72px;border-radius:50%;object-fit:cover;
   border:2px solid rgba(255,255,255,.25);flex-shrink:0;
 }
-.dem-name{display:block;font-size:15px;font-weight:700;color:#fff;text-align:left}
-.dem-role{display:block;font-size:13px;color:rgba(255,255,255,.45);text-align:left;margin-top:2px}
+.q-name{display:block;font-size:15px;font-weight:700;color:#fff;text-align:left}
+.q-role{display:block;font-size:13px;color:rgba(255,255,255,.45);text-align:left;margin-top:2px}
+/* Fade-Transition beim Wechsel */
+.q-fading .q-text,.q-fading .q-img,.q-fading .q-name,.q-fading .q-role{opacity:0}
+.q-text,.q-img,.q-name,.q-role{transition:opacity .45s ease}
 
 /* ════════════════════════════════════════
    HIGHLIGHTS
@@ -504,19 +506,18 @@ footer{background:var(--g900);padding:var(--s4) var(--mx);text-align:center;bord
   </div>
 </section>
 
-<!-- ════════ DEMING ════════ -->
-<section id="deming">
-  <div class="dem-inner r">
-    <blockquote class="dem-q">
+<!-- ════════ QUOTE SECTION ════════ -->
+<section id="quote-section">
+  <div class="q-inner r">
+    <blockquote class="q-text" id="q-text">
       In God we trust.<br>
       <strong>All others must bring data.</strong>
     </blockquote>
-    <div class="dem-attr">
-      <img src="images/deming.jpg" alt="W. Edwards Deming" class="dem-img"
-           onerror="this.style.opacity='.3'">
+    <div class="q-attr">
+      <img src="images/deming.jpg" alt="" class="q-img" id="q-img">
       <div>
-        <span class="dem-name">William Edwards Deming</span>
-        <span class="dem-role">Statistiker &amp; Qualitätsmanagement-Pionier (1900–1993)</span>
+        <span class="q-name" id="q-name">William Edwards Deming</span>
+        <span class="q-role" id="q-role">Statistiker &amp; Qualitätsmanagement-Pionier (1900–1993)</span>
       </div>
     </div>
   </div>
@@ -775,7 +776,7 @@ footer{background:var(--g900);padding:var(--s4) var(--mx);text-align:center;bord
       <h2 class="cta-h2">Das Buch für alle,<br>die es wirklich verstehen wollen.</h2>
       <p class="cta-sub">
         18 Kapitel. 783 Seiten. Code, der läuft.
-        Komplett in Farbe.
+        Komplett in Farbe – weil gute Grafiken einen Unterschied machen.
       </p>
       <div>
         <a href="https://www.hanser-fachbuch.de/Data-Science-mit-Big-Data/978-3-446-47640-0"
@@ -917,6 +918,53 @@ const cho = new IntersectionObserver(entries => {
   });
 }, {threshold:.45, rootMargin:'-18% 0px -18% 0px'});
 chis.forEach(c => cho.observe(c));
+
+// ── Quote: Deming 60% / Humby 40% ──────────────────
+const quotes = [
+  {
+    weight: 60,
+    lines: ['In God we trust.<br>', '<strong>All others must bring data.</strong>'],
+    img: 'images/deming.jpg',
+    name: 'William Edwards Deming',
+    role: 'Statistiker &amp; Qualitätsmanagement-Pionier (1900–1993)'
+  },
+  {
+    weight: 40,
+    lines: ['Data is the new oil.<br>', '<strong>It\'s valuable, but if unrefined<br>it cannot really be used.</strong>'],
+    img: 'images/humby.jpg',
+    name: 'Clive Humby',
+    role: 'Mathematiker &amp; Datenpionier'
+  }
+];
+
+// Weighted random pick
+function pickQuote() {
+  const total = quotes.reduce((s, q) => s + q.weight, 0);
+  let r = Math.random() * total;
+  for (const q of quotes) { r -= q.weight; if (r <= 0) return q; }
+  return quotes[0];
+}
+
+const qText = document.getElementById('q-text');
+const qImg  = document.getElementById('q-img');
+const qName = document.getElementById('q-name');
+const qRole = document.getElementById('q-role');
+const qSection = document.getElementById('quote-section');
+
+function setQuote(q) {
+  qSection.classList.add('q-fading');
+  setTimeout(() => {
+    qText.innerHTML = q.lines.join('');
+    qImg.src = q.img;
+    qImg.alt = q.name;
+    qName.innerHTML = q.name;
+    qRole.innerHTML = q.role;
+    qSection.classList.remove('q-fading');
+  }, 460);
+}
+
+// On load: pick once weighted-randomly
+setQuote(pickQuote());
 </script>
 </body>
 </html>
