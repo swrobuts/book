@@ -3,1638 +3,1293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Science mit Big Data – Das Buch</title>
-<meta name="description" content="Data Science mit Big Data: Techniken, Werkzeuge und Algorithmen zur Analyse großer Datenmengen. Von Oliver Hummel, Marcus Kessel, Beate Navarro Bullock und Robert Butscher.">
+<title>Data Science mit Big Data – Hanser Verlag 2026</title>
+<meta name="description" content="Data Science mit Big Data: Techniken, Werkzeuge und Algorithmen zur Analyse großer Datenmengen. Von Hummel, Kessel, Navarro Bullock und Butscher. Carl Hanser Verlag 2026.">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 /* ══════════════════════════════════════════════
    DESIGN TOKENS – Otl Aicher / Bauhaus
-   8px grid, Segoe UI, Orange #E87722, Blau #005B9A
+   Weißer Hintergrund · 8px Grid · Segoe UI
+   Orange #E87722 sparsam · Blau #005B9A sparsam
 ══════════════════════════════════════════════ */
 :root {
-  --white:      #FFFFFF;
-  --gray-50:    #F8F9FA;
-  --gray-100:   #F1F3F5;
-  --gray-200:   #E9ECEF;
-  --gray-400:   #ADB5BD;
-  --gray-600:   #6C757D;
-  --gray-700:   #495057;
-  --gray-800:   #343A40;
-  --gray-900:   #1A1C1E;
+  --white:    #FFFFFF;
+  --g100:     #F1F3F5;
+  --g200:     #E9ECEF;
+  --g400:     #ADB5BD;
+  --g500:     #8E9BA8;
+  --g600:     #6C757D;
+  --g700:     #495057;
+  --g800:     #343A40;
+  --g900:     #212529;
 
-  --orange:     #E87722;
-  --orange-10:  rgba(232,119,34,0.10);
-  --orange-20:  rgba(232,119,34,0.18);
+  --orange:   #E87722;
+  --o10:      rgba(232,119,34,0.10);
+  --o20:      rgba(232,119,34,0.18);
 
-  --blue:       #005B9A;
-  --blue-10:    rgba(0,91,154,0.08);
-  --blue-deep:  #003D6B;
+  --blue:     #005B9A;
+  --b10:      rgba(0,91,154,0.08);
+  --b20:      rgba(0,91,154,0.14);
 
-  --font:       'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --green:    #3D7A56;
+  --gr10:     rgba(61,122,86,0.10);
 
-  /* 8px grid spacing */
-  --sp1: 8px; --sp2: 16px; --sp3: 24px; --sp4: 32px;
-  --sp5: 40px; --sp6: 48px; --sp8: 64px; --sp10: 80px; --sp12: 96px;
+  --font:     'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* 8px grid */
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px;
+  --s5:40px; --s6:48px; --s8:64px; --s10:80px; --s12:96px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; }
 body {
   font-family: var(--font);
-  background: var(--gray-900);
-  color: var(--white);
+  background: var(--white);
+  color: var(--g900);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-/* ══════════════════════════════════════════════
-   SCROLL PROGRESS
-══════════════════════════════════════════════ */
-#progress-bar {
+/* ── Orange 4px Signatur-Bar (Aicher) ── */
+.top-bar {
   position: fixed;
-  top: 0; left: 0;
-  height: 3px;
+  top: 0; left: 0; right: 0;
+  height: 4px;
   background: var(--orange);
+  z-index: 1000;
+}
+
+/* ── Scroll-Progress (dezent) ── */
+#progress {
+  position: fixed;
+  top: 4px; left: 0;
+  height: 2px;
+  background: var(--orange);
+  opacity: 0.35;
   width: 0%;
-  z-index: 9999;
+  z-index: 999;
   transition: width 0.1s linear;
 }
 
-/* ══════════════════════════════════════════════
-   NAV
-══════════════════════════════════════════════ */
+/* ── NAV ── */
 nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 4px; left: 0; right: 0;
   z-index: 100;
-  padding: var(--sp2) var(--sp5);
+  height: 56px;
+  padding: 0 var(--s5);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(26,28,30,0);
-  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+  background: rgba(255,255,255,0);
+  transition: background 0.3s, border-bottom 0.3s;
 }
 nav.scrolled {
-  background: rgba(26,28,30,0.88);
+  background: rgba(255,255,255,0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid var(--g200);
 }
 .nav-logo {
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--orange);
+  color: var(--g900);
   text-decoration: none;
 }
+.nav-logo em { color: var(--orange); font-style: normal; }
 .nav-cta {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp1);
+  gap: 8px;
   background: var(--orange);
   color: var(--white);
   text-decoration: none;
   font-size: 13px;
-  font-weight: 600;
-  padding: 10px var(--sp3);
-  border-radius: 100px;
+  font-weight: 700;
+  padding: 9px var(--s3);
+  border-radius: 3px;
   transition: opacity 0.2s;
 }
-.nav-cta:hover { opacity: 0.85; }
+.nav-cta:hover { opacity: 0.88; }
+.nav-cta svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── Layout ── */
+.container { max-width: 1040px; margin: 0 auto; padding: 0 var(--s5); }
+.cw { max-width: 1280px; margin: 0 auto; padding: 0 var(--s5); }
 
 /* ══════════════════════════════════════════════
-   SECTIONS COMMON
-══════════════════════════════════════════════ */
-section { position: relative; }
-.container {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 var(--sp5);
-}
-.container-wide {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 var(--sp5);
-}
-
-/* ══════════════════════════════════════════════
-   HERO – CINEMATIC DARK
+   HERO
 ══════════════════════════════════════════════ */
 #hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  padding: 112px var(--s5) var(--s12);
+  background: var(--white);
+  border-bottom: 1px solid var(--g200);
+}
+.hero-grid {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s8);
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px var(--sp5) var(--sp12);
-  background: var(--gray-900);
-  position: relative;
-  overflow: hidden;
 }
-
-/* Grid overlay */
-#hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(232,119,34,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,119,34,0.04) 1px, transparent 1px);
-  background-size: 64px 64px;
-  pointer-events: none;
-}
-
-/* Glow blob */
-#hero::after {
-  content: '';
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 500px;
-  background: radial-gradient(ellipse at center,
-    rgba(232,119,34,0.12) 0%,
-    rgba(0,91,154,0.06) 50%,
-    transparent 70%);
-  pointer-events: none;
-  animation: pulse 6s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.8; transform: translateX(-50%) scale(1); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
-}
-
 .hero-eyebrow {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: var(--sp3);
-  position: relative;
-  z-index: 1;
+  margin-bottom: var(--s2);
   opacity: 0;
-  animation: fadeUp 0.8s ease 0.2s forwards;
+  animation: fadeUp 0.6s ease 0.1s forwards;
 }
-
-.hero-title {
-  font-size: clamp(48px, 8vw, 96px);
-  font-weight: 700;
-  line-height: 1.0;
-  letter-spacing: -0.03em;
-  color: var(--white);
-  margin-bottom: var(--sp4);
-  position: relative;
-  z-index: 1;
+.hero-h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--g900);
+  margin-bottom: var(--s3);
   opacity: 0;
-  animation: fadeUp 0.9s ease 0.4s forwards;
+  animation: fadeUp 0.7s ease 0.2s forwards;
 }
-
-.hero-title .accent {
-  color: var(--orange);
-}
-
-.hero-subtitle {
-  font-size: clamp(18px, 2.5vw, 24px);
-  font-weight: 300;
-  color: rgba(255,255,255,0.55);
-  max-width: 640px;
-  line-height: 1.5;
-  margin-bottom: var(--sp6);
-  position: relative;
-  z-index: 1;
+.hero-sub {
+  font-size: clamp(15px, 1.8vw, 19px);
+  color: var(--g600);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-bottom: var(--s5);
   opacity: 0;
-  animation: fadeUp 1s ease 0.6s forwards;
+  animation: fadeUp 0.8s ease 0.3s forwards;
 }
-
 .hero-actions {
   display: flex;
-  align-items: center;
-  gap: var(--sp3);
+  gap: var(--s2);
   flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
+  margin-bottom: var(--s6);
   opacity: 0;
-  animation: fadeUp 1s ease 0.8s forwards;
+  animation: fadeUp 0.8s ease 0.4s forwards;
 }
-
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: var(--orange);
   color: var(--white);
   text-decoration: none;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 16px 32px;
-  border-radius: 100px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 24px rgba(232,119,34,0.35);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 13px var(--s4);
+  border-radius: 3px;
+  transition: opacity 0.2s, transform 0.2s;
 }
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(232,119,34,0.45);
-}
-
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary svg { width: 16px; height: 16px; flex-shrink: 0; }
 .btn-secondary {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   background: transparent;
-  color: rgba(255,255,255,0.75);
+  color: var(--g700);
   text-decoration: none;
-  font-size: 16px;
-  font-weight: 500;
-  padding: 16px 32px;
-  border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.15);
-  transition: border-color 0.2s, color 0.2s;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px var(--s4);
+  border-radius: 3px;
+  border: 1.5px solid var(--g200);
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
 }
-.btn-secondary:hover {
-  border-color: rgba(255,255,255,0.35);
-  color: var(--white);
-}
+.btn-secondary:hover { border-color: var(--g700); color: var(--g900); transform: translateY(-1px); }
+.btn-secondary svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-.hero-meta {
-  margin-top: var(--sp6);
+.hero-stats {
   display: flex;
-  align-items: center;
-  gap: var(--sp4);
+  gap: var(--s4);
   flex-wrap: wrap;
-  justify-content: center;
-  position: relative;
-  z-index: 1;
   opacity: 0;
-  animation: fadeUp 1s ease 1.0s forwards;
+  animation: fadeUp 0.8s ease 0.5s forwards;
 }
-
-.hero-meta-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.hero-meta-value {
+.hero-stat { display: flex; flex-direction: column; gap: 2px; }
+.stat-val {
   font-size: 28px;
-  font-weight: 700;
-  color: var(--white);
+  font-weight: 800;
+  color: var(--orange);
   letter-spacing: -0.02em;
+  line-height: 1;
 }
-.hero-meta-label {
+.stat-lbl {
   font-size: 11px;
-  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  color: var(--g500);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  font-weight: 500;
 }
-.hero-meta-divider {
-  width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.1);
-}
+.stat-sep { width: 1px; height: 40px; background: var(--g200); align-self: center; }
 
-/* Book cover float */
+/* Book cover */
 .hero-cover {
-  margin-top: var(--sp8);
-  position: relative;
-  z-index: 1;
+  flex-shrink: 0;
   opacity: 0;
-  animation: fadeUp 1.2s ease 1.2s forwards;
+  animation: fadeUp 1s ease 0.65s forwards;
 }
 .hero-cover img {
-  width: 220px;
+  width: 192px;
   height: auto;
-  border-radius: 8px;
+  border-radius: 3px;
   box-shadow:
-    0 24px 80px rgba(0,0,0,0.6),
-    0 0 0 1px rgba(255,255,255,0.06),
-    0 0 60px rgba(232,119,34,0.15);
-  transform: perspective(800px) rotateY(-8deg) rotateX(2deg);
+    0 2px 0 rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.10),
+    0 24px 48px rgba(0,0,0,0.08);
+  transform: perspective(600px) rotateY(-5deg) rotateX(1deg);
   transition: transform 0.6s ease;
 }
-.hero-cover img:hover {
-  transform: perspective(800px) rotateY(0deg) rotateX(0deg);
-}
-
-/* scroll hint */
-.scroll-hint {
-  position: absolute;
-  bottom: var(--sp5);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp1);
-  z-index: 1;
-  opacity: 0;
-  animation: fadeIn 1s ease 2s forwards;
-}
-.scroll-hint span {
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
-}
-.scroll-arrow {
-  width: 20px;
-  height: 20px;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
+.hero-cover img:hover { transform: perspective(600px) rotateY(0) rotateX(0); }
 
 /* ══════════════════════════════════════════════
-   CHAPTER SCROLL STORY
+   SECTION COMMONS
 ══════════════════════════════════════════════ */
-#story {
-  background: var(--gray-900);
-  padding: var(--sp12) 0;
-}
-
-.story-intro {
-  text-align: center;
-  padding: 0 var(--sp5) var(--sp12);
-  max-width: 640px;
-  margin: 0 auto;
-}
-.section-eyebrow {
+.s-eyebrow {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: var(--sp2);
+  margin-bottom: var(--s2);
 }
-.section-title {
-  font-size: clamp(32px, 5vw, 52px);
-  font-weight: 700;
+.s-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.1;
-  color: var(--white);
-  margin-bottom: var(--sp3);
+  color: var(--g900);
+  margin-bottom: var(--s3);
 }
-.section-body {
-  font-size: 18px;
-  color: rgba(255,255,255,0.5);
+.s-body {
+  font-size: 17px;
+  color: var(--g600);
+  line-height: 1.7;
+  max-width: 560px;
+}
+
+/* ══════════════════════════════════════════════
+   HIGHLIGHTS
+══════════════════════════════════════════════ */
+#highlights {
+  padding: var(--s12) 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--g200);
+}
+.hl-header { margin-bottom: var(--s8); }
+.hl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s3);
+}
+.hl-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-top: 3px solid var(--orange);
+  border-radius: 2px;
+  padding: var(--s4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hl-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.hl-icon {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 3px;
+  background: var(--o10);
+  margin-bottom: var(--s3);
+}
+.hl-icon svg { width: 20px; height: 20px; stroke: var(--orange); }
+.hl-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--g900);
+  margin-bottom: var(--s1);
+}
+.hl-body {
+  font-size: 14px;
+  color: var(--g600);
   line-height: 1.7;
 }
 
-/* Sticky scroll chapters */
-.chapters-wrapper {
+/* ══════════════════════════════════════════════
+   CHAPTERS SCROLLYTELLING
+══════════════════════════════════════════════ */
+#chapters {
+  padding: var(--s12) 0;
+  background: var(--g100);
+  border-top: 1px solid var(--g200);
+  border-bottom: 1px solid var(--g200);
+}
+.ch-header { margin-bottom: var(--s8); }
+.ch-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  min-height: 100vh;
-  position: relative;
+  grid-template-columns: 340px 1fr;
+  gap: var(--s5);
+  align-items: start;
 }
 
-.chapters-sticky {
+/* Sticky panel */
+.ch-sticky {
   position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--sp8) var(--sp8) var(--sp8) var(--sp12);
-  overflow: hidden;
+  top: 72px;
 }
-
-.chapter-display {
-  position: relative;
-  width: 100%;
+.ch-card {
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-left: 4px solid var(--orange);
+  border-radius: 2px;
+  padding: var(--s4) var(--s4) var(--s3);
 }
-
-.chapter-visual {
-  width: 100%;
-  aspect-ratio: 1;
-  max-width: 400px;
-  border-radius: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--sp6);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.5s ease;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-.chapter-visual::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-.chapter-icon-large {
-  font-size: 64px;
-  line-height: 1;
-  margin-bottom: var(--sp3);
-  position: relative;
-  z-index: 1;
-}
-.chapter-num {
+.ch-card-eye {
   font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--orange);
   font-weight: 600;
-  margin-bottom: var(--sp1);
-  position: relative;
-  z-index: 1;
-}
-.chapter-name-large {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.02em;
-  position: relative;
-  z-index: 1;
-}
-.chapter-glow {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.3;
-  transition: background 0.5s ease;
-}
-
-/* Chapter scroll items */
-.chapters-scroll {
-  padding: var(--sp12) var(--sp8) var(--sp12) var(--sp4);
-}
-
-.chapter-item {
-  padding: var(--sp6) 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  opacity: 0.3;
-  transform: translateX(16px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  cursor: default;
-}
-.chapter-item.active {
-  opacity: 1;
-  transform: translateX(0);
-}
-.chapter-item:last-child { border-bottom: none; }
-
-.chapter-label {
-  font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--orange);
-  font-weight: 600;
-  margin-bottom: var(--sp1);
+  margin-bottom: var(--s2);
 }
-.chapter-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--white);
+.ch-card-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--o10);
+  border-radius: 3px;
+  margin-bottom: var(--s3);
+  transition: opacity 0.15s, transform 0.15s;
+}
+.ch-card-icon svg { width: 24px; height: 24px; stroke: var(--orange); }
+.ch-card-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--g900);
   letter-spacing: -0.02em;
-  margin-bottom: var(--sp2);
+  line-height: 1.2;
+  margin-bottom: var(--s2);
+  transition: opacity 0.15s;
 }
-.chapter-desc {
-  font-size: 15px;
-  color: rgba(255,255,255,0.5);
+.ch-card-desc {
+  font-size: 14px;
+  color: var(--g600);
   line-height: 1.7;
-  margin-bottom: var(--sp2);
+  transition: opacity 0.15s;
 }
-.chapter-tech-pills {
+/* Dots */
+.ch-dots {
   display: flex;
+  gap: 6px;
   flex-wrap: wrap;
-  gap: var(--sp1);
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--g200);
 }
-.tech-pill {
+.ch-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--g200);
+  transition: background 0.3s, transform 0.2s;
+}
+.ch-dot.on { background: var(--orange); transform: scale(1.3); }
+
+/* Chapter list */
+.ch-list { display: flex; flex-direction: column; }
+.ch-item {
+  padding: var(--s4);
+  border-bottom: 1px solid var(--g200);
+  background: rgba(255,255,255,0.5);
+  border-left: 3px solid transparent;
+  transition: border-color 0.25s, background 0.25s, opacity 0.3s;
+  cursor: default;
+}
+.ch-item:first-child {
+  border-top: 1px solid var(--g200);
+  border-radius: 2px 2px 0 0;
+}
+.ch-item:last-child { border-radius: 0 0 2px 2px; }
+.ch-item.on {
+  border-left-color: var(--orange);
+  background: var(--white);
+  opacity: 1;
+}
+.ch-item:not(.on) { opacity: 0.55; }
+.ch-item-eye {
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.5);
-  border: 1px solid rgba(255,255,255,0.08);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
+  color: var(--g400);
+  margin-bottom: 4px;
+  transition: color 0.25s;
 }
-.tech-pill.highlight {
-  background: var(--orange-10);
-  color: var(--orange);
-  border-color: rgba(232,119,34,0.2);
-}
-
-/* ══════════════════════════════════════════════
-   FEATURES – APPLE GRID
-══════════════════════════════════════════════ */
-#features {
-  background: #0D0F11;
-  padding: var(--sp12) 0;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  overflow: hidden;
-  margin-top: var(--sp8);
-}
-
-.feature-card {
-  background: #0D0F11;
-  padding: var(--sp6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp2);
-  transition: background 0.3s;
-}
-.feature-card:hover {
-  background: rgba(255,255,255,0.02);
-}
-
-.feature-icon {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background: var(--orange-10);
-  border: 1px solid rgba(232,119,34,0.15);
-  flex-shrink: 0;
-}
-
-.feature-title {
+.ch-item.on .ch-item-eye { color: var(--orange); }
+.ch-item-title {
   font-size: 18px;
   font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.02em;
+  color: var(--g700);
+  letter-spacing: -0.01em;
+  margin-bottom: 0;
+  transition: color 0.25s;
 }
-.feature-body {
+.ch-item.on .ch-item-title {
+  color: var(--g900);
+  margin-bottom: var(--s2);
+}
+.ch-item-desc {
   font-size: 14px;
-  color: rgba(255,255,255,0.45);
+  color: var(--g600);
   line-height: 1.7;
+  display: none;
+  margin-bottom: var(--s2);
 }
+.ch-item.on .ch-item-desc { display: block; }
+.ch-pills { display: none; flex-wrap: wrap; gap: 6px; }
+.ch-item.on .ch-pills { display: flex; }
+.pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 2px;
+  background: var(--g100);
+  color: var(--g600);
+  border: 1px solid var(--g200);
+  letter-spacing: 0.04em;
+}
+.pill.o { background: var(--o10); color: var(--orange); border-color: rgba(232,119,34,0.18); }
+.pill.b { background: var(--b10); color: var(--blue); border-color: rgba(0,91,154,0.14); }
 
 /* ══════════════════════════════════════════════
-   TECH STACK – HORIZONTAL SCROLL
+   TECH STACK TICKER
 ══════════════════════════════════════════════ */
 #stack {
-  background: var(--gray-900);
-  padding: var(--sp12) 0;
+  padding: var(--s12) 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--g200);
   overflow: hidden;
 }
-
-.stack-ticker-wrapper {
+.stack-hd { margin-bottom: var(--s8); }
+.ticker-wrap {
   position: relative;
-  margin-top: var(--sp8);
   overflow: hidden;
+  margin: 0 calc(-1 * var(--s5));
 }
-.stack-ticker-wrapper::before,
-.stack-ticker-wrapper::after {
+.ticker-wrap::before,
+.ticker-wrap::after {
   content: '';
   position: absolute;
   top: 0; bottom: 0;
-  width: 120px;
+  width: 80px;
   z-index: 2;
   pointer-events: none;
 }
-.stack-ticker-wrapper::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--gray-900), transparent);
-}
-.stack-ticker-wrapper::after {
-  right: 0;
-  background: linear-gradient(270deg, var(--gray-900), transparent);
-}
-
-.stack-ticker {
+.ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--white), transparent); }
+.ticker-wrap::after  { right: 0; background: linear-gradient(270deg, var(--white), transparent); }
+.ticker-track {
   display: flex;
-  gap: var(--sp3);
-  animation: ticker 40s linear infinite;
+  gap: var(--s2);
+  padding: var(--s2) 0;
+  animation: ticker 32s linear infinite;
   width: max-content;
 }
-.stack-ticker:hover { animation-play-state: paused; }
-
+.ticker-track:hover { animation-play-state: paused; }
 @keyframes ticker {
-  0% { transform: translateX(0); }
+  0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-
-.stack-badge {
+.s-pill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 24px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  white-space: nowrap;
-  font-size: 14px;
+  gap: 8px;
+  padding: 10px var(--s3);
+  border-radius: 2px;
+  background: var(--g100);
+  border: 1px solid var(--g200);
+  font-size: 13px;
   font-weight: 600;
-  color: rgba(255,255,255,0.7);
-  transition: all 0.2s;
+  color: var(--g700);
+  white-space: nowrap;
   flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
-.stack-badge:hover {
-  background: var(--orange-10);
+.s-pill:hover {
+  background: var(--o10);
   border-color: rgba(232,119,34,0.2);
-  color: var(--white);
+  color: var(--orange);
 }
-.stack-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--orange);
-  flex-shrink: 0;
-}
+.s-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--orange); flex-shrink: 0; }
 
 /* ══════════════════════════════════════════════
    AUTHORS
 ══════════════════════════════════════════════ */
 #authors {
-  background: #0D0F11;
-  padding: var(--sp12) 0;
+  padding: var(--s12) 0;
+  background: var(--g100);
+  border-bottom: 1px solid var(--g200);
 }
-
 .authors-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--sp3);
-  margin-top: var(--sp8);
+  gap: var(--s3);
+  margin-top: var(--s8);
 }
-
 .author-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  padding: var(--sp5) var(--sp4);
+  background: var(--white);
+  border: 1px solid var(--g200);
+  border-radius: 2px;
+  padding: var(--s4);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--sp2);
-  transition: border-color 0.3s, transform 0.3s;
+  gap: var(--s2);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .author-card:hover {
-  border-color: rgba(232,119,34,0.2);
-  transform: translateY(-4px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
 }
-
-.author-avatar {
-  width: 72px;
-  height: 72px;
+.author-av {
+  width: 64px; height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
   color: var(--white);
   flex-shrink: 0;
-  border: 2px solid rgba(232,119,34,0.2);
 }
-
 .author-name {
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 700;
-  color: var(--white);
-  letter-spacing: -0.01em;
+  color: var(--g900);
 }
 .author-role {
   font-size: 13px;
-  color: rgba(255,255,255,0.4);
+  color: var(--g500);
   line-height: 1.5;
 }
 .author-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--orange);
-  text-decoration: none;
+  gap: 5px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--blue);
+  text-decoration: none;
   transition: opacity 0.2s;
 }
-.author-link:hover { opacity: 0.7; }
+.author-link:hover { opacity: 0.65; }
+.author-link svg { width: 12px; height: 12px; }
 
 /* ══════════════════════════════════════════════
-   STATS MARQUEE
+   BUY CTA – Orange als einzig bewusst großflächige Farbe
 ══════════════════════════════════════════════ */
-#stats {
+#buy {
   background: var(--orange);
-  padding: var(--sp6) 0;
-  overflow: hidden;
+  padding: var(--s12) var(--s5);
 }
-.stats-row {
-  display: flex;
-  gap: var(--sp8);
-  animation: ticker-slow 20s linear infinite;
-  width: max-content;
-}
-@keyframes ticker-slow {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: var(--sp3);
-  flex-shrink: 0;
-  color: var(--white);
-}
-.stat-number {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-.stat-label {
-  font-size: 13px;
-  font-weight: 500;
-  opacity: 0.8;
-}
-.stat-sep {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.4);
-  flex-shrink: 0;
-}
-
-/* ══════════════════════════════════════════════
-   CTA SECTION
-══════════════════════════════════════════════ */
-#cta {
-  background: var(--gray-900);
-  padding: var(--sp12) var(--sp5);
-  text-align: center;
-}
-
-.cta-card {
-  max-width: 720px;
-  margin: 0 auto;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 32px;
-  padding: var(--sp10) var(--sp8);
-  position: relative;
-  overflow: hidden;
-}
-.cta-card::before {
-  content: '';
-  position: absolute;
-  top: -80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(ellipse, rgba(232,119,34,0.12), transparent 70%);
-  pointer-events: none;
-}
-
-.cta-eyebrow {
+.buy-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+.buy-eye {
   font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--orange);
   font-weight: 600;
-  margin-bottom: var(--sp3);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: var(--s3);
 }
-.cta-title {
+.buy-h2 {
   font-size: clamp(32px, 5vw, 52px);
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   line-height: 1.1;
   color: var(--white);
-  margin-bottom: var(--sp3);
+  margin-bottom: var(--s3);
 }
-.cta-body {
+.buy-sub {
   font-size: 17px;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.7;
-  margin-bottom: var(--sp6);
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.65;
+  margin-bottom: var(--s6);
 }
-
-.cta-buttons {
-  display: flex;
+.btn-white {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--sp3);
-  flex-wrap: wrap;
-  margin-bottom: var(--sp5);
+  gap: 8px;
+  background: var(--white);
+  color: var(--orange);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px var(--s6);
+  border-radius: 3px;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-bottom: var(--s4);
 }
-
+.btn-white:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-white svg { width: 16px; height: 16px; flex-shrink: 0; }
 .buy-links {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sp3);
+  gap: var(--s3);
   flex-wrap: wrap;
 }
 .buy-link {
   font-size: 13px;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.65);
   text-decoration: none;
   transition: color 0.2s;
 }
-.buy-link:hover { color: rgba(255,255,255,0.8); }
-.buy-link-sep { color: rgba(255,255,255,0.15); }
+.buy-link:hover { color: var(--white); }
+.buy-sep { color: rgba(255,255,255,0.3); }
 
 /* ══════════════════════════════════════════════
-   GITHUB SECTION
+   GITHUB
 ══════════════════════════════════════════════ */
 #github {
-  background: #0D0F11;
-  padding: var(--sp12) 0;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: var(--s10) 0;
+  background: var(--white);
+  border-bottom: 1px solid var(--g200);
 }
-
-.github-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 20px;
-  padding: var(--sp6) var(--sp8);
-  display: flex;
+.gh-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--s8);
   align-items: center;
-  justify-content: space-between;
-  gap: var(--sp6);
-  margin-top: var(--sp6);
-  transition: border-color 0.3s;
 }
-.github-card:hover {
-  border-color: rgba(255,255,255,0.12);
+.gh-repo-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--g400);
+  margin-bottom: var(--s2);
 }
-.github-info {}
-.github-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: var(--sp1);
+.gh-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--g900);
   letter-spacing: -0.02em;
+  margin-bottom: var(--s2);
 }
-.github-desc {
+.gh-desc {
   font-size: 15px;
-  color: rgba(255,255,255,0.45);
+  color: var(--g600);
+  line-height: 1.7;
 }
-.github-btn {
+.btn-dark {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 28px;
-  border-radius: 100px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: var(--white);
+  gap: 8px;
+  border: 1.5px solid var(--g900);
+  color: var(--g900);
+  background: transparent;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  padding: 12px var(--s4);
+  border-radius: 3px;
   white-space: nowrap;
-  transition: background 0.2s, border-color 0.2s;
-  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
 }
-.github-btn:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.2);
-}
+.btn-dark:hover { background: var(--g900); color: var(--white); transform: translateY(-1px); }
+.btn-dark svg { width: 16px; height: 16px; flex-shrink: 0; }
 
 /* ══════════════════════════════════════════════
    FOOTER
 ══════════════════════════════════════════════ */
 footer {
-  background: var(--gray-900);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding: var(--sp6) var(--sp5);
+  background: var(--g900);
+  padding: var(--s5);
   text-align: center;
 }
-.footer-text {
-  font-size: 13px;
-  color: rgba(255,255,255,0.25);
-  line-height: 1.8;
-}
-.footer-text a {
-  color: rgba(255,255,255,0.4);
-  text-decoration: none;
-}
+.footer-text { font-size: 13px; color: var(--g500); line-height: 1.8; }
+.footer-text a { color: var(--g400); text-decoration: none; }
 .footer-text a:hover { color: var(--orange); }
 
 /* ══════════════════════════════════════════════
-   SCROLL ANIMATIONS – Intersection Observer
+   SCROLL ANIMATIONS
+   translateY(16px) → 0 per Aicher-Manifest
 ══════════════════════════════════════════════ */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.reveal.vis { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.08s; }
+.d2 { transition-delay: 0.16s; }
+.d3 { transition-delay: 0.24s; }
+.d4 { transition-delay: 0.32s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
 
 /* ══════════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════════ */
 @media (max-width: 900px) {
-  .chapters-wrapper { grid-template-columns: 1fr; }
-  .chapters-sticky { display: none; }
-  .chapter-item { opacity: 1; transform: none; }
-  .features-grid { grid-template-columns: 1fr; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-cover { display: none; }
+  .hl-grid { grid-template-columns: 1fr 1fr; }
+  .ch-layout { grid-template-columns: 1fr; }
+  .ch-sticky { display: none; }
+  .ch-item { opacity: 1 !important; }
+  .ch-item-desc { display: block !important; }
+  .ch-pills { display: flex !important; }
   .authors-grid { grid-template-columns: repeat(2, 1fr); }
-  .github-card { flex-direction: column; text-align: center; }
+  .gh-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .authors-grid { grid-template-columns: 1fr 1fr; }
-  :root { --sp12: 64px; --sp10: 56px; }
+  .hl-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: var(--s2); }
 }
 </style>
 </head>
 <body>
 
-<!-- Progress bar -->
-<div id="progress-bar"></div>
+<!-- Aicher Orange Signaturlinie -->
+<div class="top-bar"></div>
+<div id="progress"></div>
 
-<!-- Nav -->
+<!-- NAV -->
 <nav id="nav">
-  <a href="#" class="nav-logo">Data Science mit Big Data</a>
-  <a href="https://www.hanser-fachbuch.de/fachbuch/artikel/9783446476400" target="_blank" class="nav-cta">
+  <a href="#" class="nav-logo">Data Science <em>&</em> Big Data</a>
+  <a href="https://www.hanser-fachbuch.de/Data-Science-mit-Big-Data/978-3-446-47640-0"
+     target="_blank" class="nav-cta">
     Jetzt kaufen
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <i data-lucide="arrow-right"></i>
   </a>
 </nav>
 
-<!-- ═══════════════ HERO ═══════════════ -->
+<!-- ══════════ HERO ══════════ -->
 <section id="hero">
-  <p class="hero-eyebrow">Carl Hanser Verlag · ISBN 978-3-446-47640-0 · 2026</p>
+  <div class="hero-grid">
+    <div>
+      <p class="hero-eyebrow">Carl Hanser Verlag · 1.&nbsp;Auflage 2026 · ISBN&nbsp;978‑3‑446‑47640‑0</p>
+      <h1 class="hero-h1">Data Science<br>mit Big Data</h1>
+      <p class="hero-sub">Techniken, Werkzeuge und Algorithmen zur Analyse großer Datenmengen. Theoretisch fundiert, technologieunabhängig, sofort praxistauglich.</p>
 
-  <h1 class="hero-title">
-    Data Science<br>
-    <span class="accent">mit Big Data</span>
-  </h1>
+      <div class="hero-actions">
+        <a href="https://www.hanser-fachbuch.de/Data-Science-mit-Big-Data/978-3-446-47640-0"
+           target="_blank" class="btn-primary">
+          <i data-lucide="shopping-bag"></i>
+          Beim Hanser Verlag kaufen
+        </a>
+        <a href="https://github.com/bigdatabuch/buch-beispiele"
+           target="_blank" class="btn-secondary">
+          <i data-lucide="github"></i>
+          Code auf GitHub
+        </a>
+      </div>
 
-  <p class="hero-subtitle">
-    Techniken, Werkzeuge und Algorithmen zur Analyse großer Datenmengen.
-    Komplett in Farbe. 783 Seiten.
-  </p>
-
-  <div class="hero-actions">
-    <a href="https://www.hanser-fachbuch.de/fachbuch/artikel/9783446476400" target="_blank" class="btn-primary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      Buch kaufen
-    </a>
-    <a href="https://github.com/bigdatabuch/buch-beispiele" target="_blank" class="btn-secondary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-      Code auf GitHub
-    </a>
-  </div>
-
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <span class="hero-meta-value">783</span>
-      <span class="hero-meta-label">Seiten</span>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-val">783</span>
+          <span class="stat-lbl">Seiten</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="hero-stat">
+          <span class="stat-val">18</span>
+          <span class="stat-lbl">Kapitel</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="hero-stat">
+          <span class="stat-val">4</span>
+          <span class="stat-lbl">Autoren</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="hero-stat">
+          <span class="stat-val">100%</span>
+          <span class="stat-lbl">Vollfarbe</span>
+        </div>
+      </div>
     </div>
-    <div class="hero-meta-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-value">18</span>
-      <span class="hero-meta-label">Kapitel</span>
-    </div>
-    <div class="hero-meta-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-value">4</span>
-      <span class="hero-meta-label">Autoren</span>
-    </div>
-    <div class="hero-meta-divider"></div>
-    <div class="hero-meta-item">
-      <span class="hero-meta-value">100%</span>
-      <span class="hero-meta-label">Farbe</span>
-    </div>
-  </div>
 
-  <div class="hero-cover">
-    <img
-      src="https://raw.githubusercontent.com/bigdatabuch/buch-beispiele/main/buch_cover.jpg"
-      alt="Buchcover: Data Science mit Big Data"
-      onerror="this.style.display='none'; document.getElementById('cover-fallback').style.display='flex';"
-    />
-    <div id="cover-fallback" style="display:none; width:220px; height:300px; background:linear-gradient(135deg, #E87722, #005B9A); border-radius:8px; align-items:center; justify-content:center; flex-direction:column; gap:16px; box-shadow:0 24px 80px rgba(0,0,0,0.6);">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      <span style="color:white;font-weight:700;font-size:13px;text-align:center;padding:0 16px;">Data Science<br>mit Big Data</span>
+    <div class="hero-cover">
+      <img
+        src="https://raw.githubusercontent.com/bigdatabuch/buch-beispiele/main/buch_cover.jpg"
+        alt="Buchcover: Data Science mit Big Data"
+        onerror="this.parentElement.style.display='none'"
+      />
     </div>
-  </div>
-
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <svg class="scroll-arrow" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round">
-      <path d="M10 4v12M4 10l6 6 6-6"/>
-    </svg>
   </div>
 </section>
 
-<!-- ═══════════════ STATS MARQUEE ═══════════════ -->
-<section id="stats">
-  <div class="stats-row">
-    <!-- Item set 1 -->
-    <div class="stat-item">
-      <span class="stat-number">783</span>
-      <span class="stat-label">Seiten in Farbe</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">18</span>
-      <span class="stat-label">Kapitel</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">4</span>
-      <span class="stat-label">Experten-Autoren</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">50+</span>
-      <span class="stat-label">Code-Beispiele</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">4</span>
-      <span class="stat-label">Sprachen: Python, Java, R & mehr</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">1.</span>
-      <span class="stat-label">Auflage 2026</span>
-    </div>
-    <div class="stat-sep"></div>
-    <!-- Item set 2 (repeat for seamless loop) -->
-    <div class="stat-item">
-      <span class="stat-number">783</span>
-      <span class="stat-label">Seiten in Farbe</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">18</span>
-      <span class="stat-label">Kapitel</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">4</span>
-      <span class="stat-label">Experten-Autoren</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">50+</span>
-      <span class="stat-label">Code-Beispiele</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">4</span>
-      <span class="stat-label">Sprachen: Python, Java, R & mehr</span>
-    </div>
-    <div class="stat-sep"></div>
-    <div class="stat-item">
-      <span class="stat-number">1.</span>
-      <span class="stat-label">Auflage 2026</span>
-    </div>
-    <div class="stat-sep"></div>
-  </div>
-</section>
-
-<!-- ═══════════════ STORY / CHAPTERS ═══════════════ -->
-<section id="story">
+<!-- ══════════ HIGHLIGHTS ══════════ -->
+<section id="highlights">
   <div class="container">
-    <div class="story-intro reveal">
-      <p class="section-eyebrow">18 Kapitel · Vom Grundlagen-Fundament bis KI</p>
-      <h2 class="section-title">Eine Reise durch<br>die Datenwelt</h2>
-      <p class="section-body">
-        Von den Grundlagen verteilter Systeme bis zu modernen KI-Agenten –
-        jedes Kapitel baut auf dem vorherigen auf.
-      </p>
-    </div>
-  </div>
-
-  <!-- Sticky chapter display -->
-  <div class="container-wide">
-    <div class="chapters-wrapper">
-      <!-- Left: sticky visual -->
-      <div class="chapters-sticky">
-        <div class="chapter-display">
-          <div class="chapter-visual" id="chapter-visual">
-            <div class="chapter-glow" id="chapter-glow" style="background: var(--orange);"></div>
-            <div class="chapter-icon-large" id="chapter-icon">🌐</div>
-            <div class="chapter-num" id="chapter-num">Kapitel 1</div>
-            <div class="chapter-name-large" id="chapter-name">Gestatten, Data</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: scrollable chapters -->
-      <div class="chapters-scroll" id="chapters-scroll">
-
-        <div class="chapter-item active" data-icon="🌐" data-color="#E87722" data-num="Kapitel 1–2" data-name="Grundlagen &amp; Verteilung">
-          <div class="chapter-label">Kapitel 1–2 · Einführung</div>
-          <h3 class="chapter-title">Gestatten, Data – Big Data</h3>
-          <p class="chapter-desc">
-            Was ist Big Data wirklich? Google Trends, Use Cases, und die fundamentalen
-            Konzepte verteilter Systeme – CAP-Theorem, Konsistenz, Fehlertoleranz.
-            Der Startschuss für alles Weitere.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Google Trends</span>
-            <span class="tech-pill">CAP-Theorem</span>
-            <span class="tech-pill">Distributed Systems</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🗄️" data-color="#005B9A" data-num="Kapitel 3–6" data-name="Daten &amp; Management">
-          <div class="chapter-label">Kapitel 3–6 · Daten</div>
-          <h3 class="chapter-title">Daten, Formate & Management</h3>
-          <p class="chapter-desc">
-            Von Rohdaten zu strukturiertem Wissen: Datenformate von CSV bis Parquet und Avro,
-            Big-Data-Management-Konzepte, und Vorgehensmodelle für erfolgreiche Projekte.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Parquet</span>
-            <span class="tech-pill highlight">Avro</span>
-            <span class="tech-pill">PyArrow</span>
-            <span class="tech-pill">Spark</span>
-            <span class="tech-pill">Pandas</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🏛️" data-color="#3D7A56" data-num="Kapitel 7–10" data-name="Architekturen">
-          <div class="chapter-label">Kapitel 7–10 · Architektur</div>
-          <h3 class="chapter-title">Warehouse, Lake, Lakehouse & Mesh</h3>
-          <p class="chapter-desc">
-            Die vier großen Datenarchitektur-Paradigmen im direkten Vergleich. DuckDB für
-            Data Warehousing, Delta Lake für das Lakehouse – und das revolutionäre
-            Data-Mesh-Konzept für dezentrale Daten-Ownership.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">DuckDB</span>
-            <span class="tech-pill highlight">Delta Lake</span>
-            <span class="tech-pill">Data Mesh Manager</span>
-            <span class="tech-pill">Sternschema</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🔧" data-color="#8B2FC9" data-num="Kapitel 11" data-name="NoSQL Datenbanken">
-          <div class="chapter-label">Kapitel 11 · Datenbanken</div>
-          <h3 class="chapter-title">NoSQL – Sieben Welten, eine Entscheidung</h3>
-          <p class="chapter-desc">
-            Redis, MongoDB, Neo4j, Cassandra, InfluxDB, Milvus, ArangoDB, OpenSearch –
-            jede Datenbank für ihren Zweck optimiert. Mit praktischen Beispielen
-            und klaren Entscheidungshilfen.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Redis</span>
-            <span class="tech-pill highlight">MongoDB</span>
-            <span class="tech-pill highlight">Neo4j</span>
-            <span class="tech-pill">Cassandra</span>
-            <span class="tech-pill">Milvus</span>
-            <span class="tech-pill">OpenSearch</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="⚡" data-color="#E87722" data-num="Kapitel 12–13" data-name="Stream &amp; Batch">
-          <div class="chapter-label">Kapitel 12–13 · Processing</div>
-          <h3 class="chapter-title">Kafka, Spark & Flink – Real-Time bis Batch</h3>
-          <p class="chapter-desc">
-            Stream-Processing mit Apache Kafka, verteilte Berechnungen mit Spark und Flink,
-            klassisches Batch-Processing mit Hadoop und Ignite – komplett mit Java- und
-            Python-Code-Beispielen.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Kafka</span>
-            <span class="tech-pill highlight">Spark</span>
-            <span class="tech-pill highlight">Flink</span>
-            <span class="tech-pill">Hadoop</span>
-            <span class="tech-pill">Apache Ignite</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🧮" data-color="#005B9A" data-num="Kapitel 14" data-name="Skalierbare Algorithmen">
-          <div class="chapter-label">Kapitel 14 · Algorithmen</div>
-          <h3 class="chapter-title">Skalierbare Algorithmen für Milliarden Datenpunkte</h3>
-          <p class="chapter-desc">
-            Morris-Counter, HyperLogLog, Bloom-Filter, t-digest – Algorithmen,
-            die in konstantem Speicher mit Milliarden Datenpunkten arbeiten.
-            Mathematisch fundiert, praktisch implementiert.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">HyperLogLog</span>
-            <span class="tech-pill highlight">Bloom Filter</span>
-            <span class="tech-pill">Morris Counter</span>
-            <span class="tech-pill">t-digest</span>
-            <span class="tech-pill">Java</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="📊" data-color="#3D7A56" data-num="Kapitel 15–16" data-name="Analyse &amp; Architektur">
-          <div class="chapter-label">Kapitel 15–16 · Analyse</div>
-          <h3 class="chapter-title">Visualisierung, Analyse & Architekturwissen</h3>
-          <p class="chapter-desc">
-            Matplotlib, Seaborn und ggplot2 für aussagekräftige Visualisierungen,
-            Echtzeit-Monitoring, und solides Architekturwissen für den Entwurf
-            skalierbarer Big-Data-Systeme.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Matplotlib</span>
-            <span class="tech-pill highlight">ggplot2</span>
-            <span class="tech-pill">Seaborn</span>
-            <span class="tech-pill">R</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🚀" data-color="#E87722" data-num="Kapitel 17" data-name="Test &amp; Betrieb">
-          <div class="chapter-label">Kapitel 17 · DevOps</div>
-          <h3 class="chapter-title">Kubernetes – Big Data in der Cloud</h3>
-          <p class="chapter-desc">
-            Von der lokalen Entwicklungsumgebung bis zum Produktionsbetrieb:
-            Testing-Strategien, Monitoring und Kubernetes mit minikube für
-            containerisierte Big-Data-Workloads.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">Kubernetes</span>
-            <span class="tech-pill highlight">Docker</span>
-            <span class="tech-pill">minikube</span>
-            <span class="tech-pill">Monitoring</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-icon="🤖" data-color="#8B2FC9" data-num="Kapitel 18" data-name="KI-basierte Systeme">
-          <div class="chapter-label">Kapitel 18 · Künstliche Intelligenz</div>
-          <h3 class="chapter-title">LLMs, RAG, Agenten & MCP</h3>
-          <p class="chapter-desc">
-            Der Blick in die Zukunft: Training eigener Modelle, Retrieval-Augmented Generation,
-            autonome KI-Agenten und das Model Context Protocol. Big Data trifft
-            auf modernste KI-Architektur.
-          </p>
-          <div class="chapter-tech-pills">
-            <span class="tech-pill highlight">LLMs</span>
-            <span class="tech-pill highlight">RAG</span>
-            <span class="tech-pill highlight">AI Agents</span>
-            <span class="tech-pill">MCP</span>
-            <span class="tech-pill">Fine-Tuning</span>
-            <span class="tech-pill">Python</span>
-          </div>
-        </div>
-
-      </div><!-- /chapters-scroll -->
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ FEATURES ═══════════════ -->
-<section id="features">
-  <div class="container">
-    <div class="story-intro reveal">
-      <p class="section-eyebrow">Was dieses Buch besonders macht</p>
-      <h2 class="section-title">Theorie trifft<br>Praxis</h2>
+    <div class="hl-header reveal">
+      <p class="s-eyebrow">Was dieses Buch auszeichnet</p>
+      <h2 class="s-title">Theorie. Praxis. Stack.</h2>
+      <p class="s-body">Von den Grundlagen verteilter Systeme bis zu modernen KI-Architekturen – vollständig, praxisnah, mit sofort lauffähigem Code.</p>
     </div>
 
-    <div class="features-grid">
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        </div>
-        <div class="feature-title">Echter Code, keine Pseudocode</div>
-        <div class="feature-body">Alle Beispiele sind lauffähig – in Python, Java, R und mehr. Direkt aus dem Buch kopierbar, mit GitHub-Repository.</div>
+    <div class="hl-grid">
+      <div class="hl-card reveal d1">
+        <div class="hl-icon"><i data-lucide="code-2"></i></div>
+        <div class="hl-title">Lauffähiger Code</div>
+        <div class="hl-body">Alle Beispiele in Python, Java und R sind sofort ausführbar – mit GitHub-Repository und Google Colab Notebooks.</div>
       </div>
-
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <div class="feature-title">Fundiert & aktuell</div>
-        <div class="feature-body">Theoretisches Fundament kombiniert mit dem aktuellsten Stack – LLMs, RAG, MCP und moderne Cloud-Native-Architekturen.</div>
+      <div class="hl-card reveal d2">
+        <div class="hl-icon"><i data-lucide="layers"></i></div>
+        <div class="hl-title">Vollständiger Stack</div>
+        <div class="hl-body">Spark, Kafka, Flink, Delta Lake, NoSQL-Datenbanken, Kubernetes – der moderne Big-Data-Stack komplett behandelt.</div>
       </div>
-
-      <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div class="feature-title">Für alle Zielgruppen</div>
-        <div class="feature-body">Data Scientists, Entwickler, Studierende, Architekten und DevOps Engineers finden ihren Einstieg – vom Überblick bis zum tiefen Dive.</div>
+      <div class="hl-card reveal d3">
+        <div class="hl-icon"><i data-lucide="brain"></i></div>
+        <div class="hl-title">KI-Integration</div>
+        <div class="hl-body">LLMs, Retrieval-Augmented Generation, autonome Agenten und das Model Context Protocol – Big Data trifft modernste KI.</div>
       </div>
-
-      <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
-        <div class="feature-title">Google Colab ready</div>
-        <div class="feature-body">Ausgewählte Kapitel haben direkt verlinkte Jupyter Notebooks in Google Colab – sofort im Browser ausführbar, ohne Setup.</div>
+      <div class="hl-card reveal d1">
+        <div class="hl-icon"><i data-lucide="package"></i></div>
+        <div class="hl-title">Docker-First</div>
+        <div class="hl-body">Alle Infrastruktur-Beispiele laufen mit Docker und Docker Compose – reproduzierbar, isoliert, produktionsnah.</div>
       </div>
-
-      <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-        </div>
-        <div class="feature-title">Docker-First</div>
-        <div class="feature-body">Alle Infrastruktur-Beispiele laufen mit Docker und Docker Compose – reproduzierbar, isoliert, produktionsnah.</div>
+      <div class="hl-card reveal d2">
+        <div class="hl-icon"><i data-lucide="users"></i></div>
+        <div class="hl-title">Alle Zielgruppen</div>
+        <div class="hl-body">Studierende, Data Engineers, Architekten, DevOps Engineers und Data Scientists finden ihren Einstieg und ihre Vertiefung.</div>
       </div>
-
-      <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87722" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        </div>
-        <div class="feature-title">783 Seiten Vollfarbe</div>
-        <div class="feature-body">Komplett in Farbe gedruckt. Diagramme, Architekturgrafiken und Code-Listings in höchster Qualität – Hanser-Standard.</div>
+      <div class="hl-card reveal d3">
+        <div class="hl-icon"><i data-lucide="book-open"></i></div>
+        <div class="hl-title">783 Seiten Vollfarbe</div>
+        <div class="hl-body">Komplett in Farbe gedruckt. Architekturgrafiken, Diagramme und Code-Listings in höchster Qualität. E-Book inklusive.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ TECH STACK TICKER ═══════════════ -->
+<!-- ══════════ CHAPTERS SCROLLYTELLING ══════════ -->
+<section id="chapters">
+  <div class="cw">
+    <div class="ch-header reveal">
+      <p class="s-eyebrow">18 Kapitel · Vom Fundament zur KI</p>
+      <h2 class="s-title">Eine Reise durch die Datenwelt</h2>
+    </div>
+
+    <div class="ch-layout">
+      <!-- Sticky display -->
+      <div class="ch-sticky">
+        <div class="ch-card">
+          <div class="ch-card-eye" id="c-eye">Kapitel 1–2 · Einführung</div>
+          <div class="ch-card-icon" id="c-icon"><i data-lucide="globe"></i></div>
+          <div class="ch-card-title" id="c-title">Gestatten, Data</div>
+          <div class="ch-card-desc" id="c-desc">Was Big Data wirklich bedeutet – und warum verteilte Systeme alles verändern.</div>
+          <div class="ch-dots" id="c-dots"></div>
+        </div>
+      </div>
+
+      <!-- Scrollable list -->
+      <div class="ch-list" id="ch-list">
+
+        <div class="ch-item on"
+          data-eye="Kapitel 1–2 · Einführung"
+          data-icon="globe"
+          data-title="Gestatten, Data – Big Data"
+          data-desc="Was Big Data wirklich bedeutet – und warum verteilte Systeme alles verändern.">
+          <div class="ch-item-eye">Kapitel 1–2 · Einführung</div>
+          <div class="ch-item-title">Gestatten, Data – Big Data</div>
+          <div class="ch-item-desc">Was ist Big Data wirklich? Google Trends Analysen, reale Use Cases und die fundamentalen Konzepte verteilter Systeme – CAP-Theorem, Konsistenzmodelle, Fehlertoleranz. Der Startschuss für alles Weitere.</div>
+          <div class="ch-pills">
+            <span class="pill o">Google Trends</span>
+            <span class="pill">CAP-Theorem</span>
+            <span class="pill">Distributed Systems</span>
+            <span class="pill b">Python</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 3–6 · Daten"
+          data-icon="database"
+          data-title="Daten, Formate & Management"
+          data-desc="Von Rohdaten zu strukturiertem Wissen. Datenformate und Big-Data-Management kompakt.">
+          <div class="ch-item-eye">Kapitel 3–6 · Daten</div>
+          <div class="ch-item-title">Daten, Formate & Management</div>
+          <div class="ch-item-desc">Von Rohdaten zu strukturiertem Wissen: CSV, JSON, Parquet und Avro im Vergleich. Big-Data-Management-Konzepte und Vorgehensmodelle für erfolgreiche Datenprojekte in der Praxis.</div>
+          <div class="ch-pills">
+            <span class="pill o">Parquet</span>
+            <span class="pill o">Avro</span>
+            <span class="pill">PyArrow</span>
+            <span class="pill b">Pandas</span>
+            <span class="pill">Spark</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 7–10 · Architektur"
+          data-icon="layout"
+          data-title="Warehouse, Lake, Lakehouse & Mesh"
+          data-desc="Die vier großen Datenarchitektur-Paradigmen im direkten Vergleich.">
+          <div class="ch-item-eye">Kapitel 7–10 · Architektur</div>
+          <div class="ch-item-title">Warehouse, Lake, Lakehouse & Mesh</div>
+          <div class="ch-item-desc">DuckDB für analytisches Data Warehousing, Delta Lake für das Lakehouse-Konzept und das revolutionäre Data-Mesh-Paradigma für dezentrale Daten-Ownership – alle vier Architekturen im direkten Vergleich.</div>
+          <div class="ch-pills">
+            <span class="pill o">DuckDB</span>
+            <span class="pill o">Delta Lake</span>
+            <span class="pill">Data Mesh</span>
+            <span class="pill b">Sternschema</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 11 · NoSQL"
+          data-icon="server"
+          data-title="NoSQL – Sieben Welten, eine Entscheidung"
+          data-desc="Redis, MongoDB, Neo4j, Cassandra, Milvus – jede Datenbank für ihren Zweck.">
+          <div class="ch-item-eye">Kapitel 11 · NoSQL</div>
+          <div class="ch-item-title">NoSQL – Sieben Welten, eine Entscheidung</div>
+          <div class="ch-item-desc">Redis, MongoDB, Neo4j, Cassandra, InfluxDB, Milvus, ArangoDB, OpenSearch – jede Datenbank für ihren Zweck optimiert. Mit praktischen Beispielen und klaren Entscheidungshilfen für Architekten.</div>
+          <div class="ch-pills">
+            <span class="pill o">Redis</span>
+            <span class="pill o">MongoDB</span>
+            <span class="pill o">Neo4j</span>
+            <span class="pill">Cassandra</span>
+            <span class="pill">Milvus</span>
+            <span class="pill">OpenSearch</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 12–13 · Stream & Batch"
+          data-icon="zap"
+          data-title="Kafka, Spark & Flink"
+          data-desc="Stream-Processing und verteilte Berechnungen – von Echtzeit bis Batch.">
+          <div class="ch-item-eye">Kapitel 12–13 · Stream & Batch</div>
+          <div class="ch-item-title">Kafka, Spark & Flink</div>
+          <div class="ch-item-desc">Stream-Processing mit Apache Kafka, verteilte Berechnungen mit Spark und Flink, klassisches Batch-Processing mit Hadoop und Apache Ignite – vollständig mit Java- und Python-Code.</div>
+          <div class="ch-pills">
+            <span class="pill o">Apache Kafka</span>
+            <span class="pill o">Apache Spark</span>
+            <span class="pill o">Apache Flink</span>
+            <span class="pill">Hadoop</span>
+            <span class="pill b">Apache Ignite</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 14 · Algorithmen"
+          data-icon="cpu"
+          data-title="Skalierbare Algorithmen"
+          data-desc="Morris-Counter, HyperLogLog, Bloom-Filter – Algorithmen für Milliarden Datenpunkte in konstantem Speicher.">
+          <div class="ch-item-eye">Kapitel 14 · Algorithmen</div>
+          <div class="ch-item-title">Skalierbare Algorithmen</div>
+          <div class="ch-item-desc">Morris-Counter, HyperLogLog, Bloom-Filter, t-digest – Algorithmen, die in konstantem Speicher mit Milliarden Datenpunkten arbeiten. Mathematisch fundiert, direkt in Java implementiert.</div>
+          <div class="ch-pills">
+            <span class="pill o">HyperLogLog</span>
+            <span class="pill o">Bloom Filter</span>
+            <span class="pill">Morris Counter</span>
+            <span class="pill">t-digest</span>
+            <span class="pill b">Java</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 15–16 · Analyse"
+          data-icon="bar-chart-2"
+          data-title="Visualisierung & Architektur"
+          data-desc="Matplotlib, Seaborn, ggplot2 und Architekturwissen für skalierbare Big-Data-Systeme.">
+          <div class="ch-item-eye">Kapitel 15–16 · Analyse</div>
+          <div class="ch-item-title">Visualisierung & Architekturwissen</div>
+          <div class="ch-item-desc">Matplotlib, Seaborn und ggplot2 für aussagekräftige Analysen, Echtzeit-Monitoring und solides Architekturwissen für den Entwurf skalierbarer Big-Data-Systeme in der Praxis.</div>
+          <div class="ch-pills">
+            <span class="pill o">Matplotlib</span>
+            <span class="pill o">ggplot2</span>
+            <span class="pill">Seaborn</span>
+            <span class="pill b">R</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 17 · DevOps"
+          data-icon="box"
+          data-title="Test & Betrieb mit Kubernetes"
+          data-desc="Von der lokalen Entwicklungsumgebung bis zum produktiven Betrieb auf Kubernetes.">
+          <div class="ch-item-eye">Kapitel 17 · DevOps</div>
+          <div class="ch-item-title">Test & Betrieb mit Kubernetes</div>
+          <div class="ch-item-desc">Von der lokalen Entwicklungsumgebung bis zum Produktionsbetrieb: Testing-Strategien, Monitoring und Kubernetes mit minikube für containerisierte Big-Data-Workloads.</div>
+          <div class="ch-pills">
+            <span class="pill o">Kubernetes</span>
+            <span class="pill o">Docker</span>
+            <span class="pill">minikube</span>
+            <span class="pill b">Monitoring</span>
+          </div>
+        </div>
+
+        <div class="ch-item"
+          data-eye="Kapitel 18 · KI"
+          data-icon="brain"
+          data-title="LLMs, RAG, Agenten & MCP"
+          data-desc="Der Blick in die Zukunft – Big Data trifft auf modernste KI-Architektur.">
+          <div class="ch-item-eye">Kapitel 18 · Künstliche Intelligenz</div>
+          <div class="ch-item-title">LLMs, RAG, Agenten & MCP</div>
+          <div class="ch-item-desc">Training eigener Modelle, Retrieval-Augmented Generation, autonome KI-Agenten und das Model Context Protocol. Big Data trifft auf modernste KI-Architektur.</div>
+          <div class="ch-pills">
+            <span class="pill o">LLMs</span>
+            <span class="pill o">RAG</span>
+            <span class="pill o">AI Agents</span>
+            <span class="pill">MCP</span>
+            <span class="pill b">Fine-Tuning</span>
+          </div>
+        </div>
+
+      </div><!-- /ch-list -->
+    </div><!-- /ch-layout -->
+  </div>
+</section>
+
+<!-- ══════════ TECH STACK TICKER ══════════ -->
 <section id="stack">
   <div class="container">
-    <div class="story-intro reveal" style="text-align:center; padding-bottom: var(--sp8);">
-      <p class="section-eyebrow">Technologien im Buch</p>
-      <h2 class="section-title">Der moderne<br>Big-Data-Stack</h2>
+    <div class="stack-hd reveal">
+      <p class="s-eyebrow">Technologien im Buch</p>
+      <h2 class="s-title">Der moderne Big-Data-Stack</h2>
     </div>
   </div>
-  <div class="stack-ticker-wrapper">
-    <div class="stack-ticker">
-      <!-- Set 1 -->
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Spark</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Kafka</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Flink</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Hadoop</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Delta Lake</span>
-      <span class="stack-badge"><span class="stack-dot"></span>DuckDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>MongoDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Redis</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Neo4j</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Cassandra</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Milvus</span>
-      <span class="stack-badge"><span class="stack-dot"></span>OpenSearch</span>
-      <span class="stack-badge"><span class="stack-dot"></span>InfluxDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>ArangoDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Kubernetes</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Docker</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Python</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Ignite</span>
-      <span class="stack-badge"><span class="stack-dot"></span>LLMs & RAG</span>
-      <span class="stack-badge"><span class="stack-dot"></span>AI Agents</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Java</span>
-      <span class="stack-badge"><span class="stack-dot"></span>R / ggplot2</span>
-      <span class="stack-badge"><span class="stack-dot"></span>HyperLogLog</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Bloom Filter</span>
-      <!-- Set 2 (repeat) -->
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Spark</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Kafka</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Flink</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Hadoop</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Delta Lake</span>
-      <span class="stack-badge"><span class="stack-dot"></span>DuckDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>MongoDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Redis</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Neo4j</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Cassandra</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Milvus</span>
-      <span class="stack-badge"><span class="stack-dot"></span>OpenSearch</span>
-      <span class="stack-badge"><span class="stack-dot"></span>InfluxDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>ArangoDB</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Kubernetes</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Docker</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Python</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Apache Ignite</span>
-      <span class="stack-badge"><span class="stack-dot"></span>LLMs & RAG</span>
-      <span class="stack-badge"><span class="stack-dot"></span>AI Agents</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Java</span>
-      <span class="stack-badge"><span class="stack-dot"></span>R / ggplot2</span>
-      <span class="stack-badge"><span class="stack-dot"></span>HyperLogLog</span>
-      <span class="stack-badge"><span class="stack-dot"></span>Bloom Filter</span>
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <span class="s-pill"><span class="s-dot"></span>Apache Spark</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Kafka</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Flink</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Hadoop</span>
+      <span class="s-pill"><span class="s-dot"></span>Delta Lake</span>
+      <span class="s-pill"><span class="s-dot"></span>DuckDB</span>
+      <span class="s-pill"><span class="s-dot"></span>MongoDB</span>
+      <span class="s-pill"><span class="s-dot"></span>Redis</span>
+      <span class="s-pill"><span class="s-dot"></span>Neo4j</span>
+      <span class="s-pill"><span class="s-dot"></span>Cassandra</span>
+      <span class="s-pill"><span class="s-dot"></span>Milvus</span>
+      <span class="s-pill"><span class="s-dot"></span>OpenSearch</span>
+      <span class="s-pill"><span class="s-dot"></span>InfluxDB</span>
+      <span class="s-pill"><span class="s-dot"></span>ArangoDB</span>
+      <span class="s-pill"><span class="s-dot"></span>Kubernetes</span>
+      <span class="s-pill"><span class="s-dot"></span>Docker</span>
+      <span class="s-pill"><span class="s-dot"></span>Python 3.10+</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Ignite</span>
+      <span class="s-pill"><span class="s-dot"></span>LLMs &amp; RAG</span>
+      <span class="s-pill"><span class="s-dot"></span>AI Agents</span>
+      <span class="s-pill"><span class="s-dot"></span>Java 11+</span>
+      <span class="s-pill"><span class="s-dot"></span>R / ggplot2</span>
+      <span class="s-pill"><span class="s-dot"></span>HyperLogLog</span>
+      <span class="s-pill"><span class="s-dot"></span>Bloom Filter</span>
+      <!-- duplicate for seamless loop -->
+      <span class="s-pill"><span class="s-dot"></span>Apache Spark</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Kafka</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Flink</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Hadoop</span>
+      <span class="s-pill"><span class="s-dot"></span>Delta Lake</span>
+      <span class="s-pill"><span class="s-dot"></span>DuckDB</span>
+      <span class="s-pill"><span class="s-dot"></span>MongoDB</span>
+      <span class="s-pill"><span class="s-dot"></span>Redis</span>
+      <span class="s-pill"><span class="s-dot"></span>Neo4j</span>
+      <span class="s-pill"><span class="s-dot"></span>Cassandra</span>
+      <span class="s-pill"><span class="s-dot"></span>Milvus</span>
+      <span class="s-pill"><span class="s-dot"></span>OpenSearch</span>
+      <span class="s-pill"><span class="s-dot"></span>InfluxDB</span>
+      <span class="s-pill"><span class="s-dot"></span>ArangoDB</span>
+      <span class="s-pill"><span class="s-dot"></span>Kubernetes</span>
+      <span class="s-pill"><span class="s-dot"></span>Docker</span>
+      <span class="s-pill"><span class="s-dot"></span>Python 3.10+</span>
+      <span class="s-pill"><span class="s-dot"></span>Apache Ignite</span>
+      <span class="s-pill"><span class="s-dot"></span>LLMs &amp; RAG</span>
+      <span class="s-pill"><span class="s-dot"></span>AI Agents</span>
+      <span class="s-pill"><span class="s-dot"></span>Java 11+</span>
+      <span class="s-pill"><span class="s-dot"></span>R / ggplot2</span>
+      <span class="s-pill"><span class="s-dot"></span>HyperLogLog</span>
+      <span class="s-pill"><span class="s-dot"></span>Bloom Filter</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ AUTHORS ═══════════════ -->
+<!-- ══════════ AUTHORS ══════════ -->
 <section id="authors">
   <div class="container">
-    <div class="story-intro reveal" style="text-align:center; padding-bottom: var(--sp8);">
-      <p class="section-eyebrow">Vier Stimmen, eine Vision</p>
-      <h2 class="section-title">Die Autoren</h2>
-      <p class="section-body">Vier Expertinnen und Experten aus Wissenschaft und Praxis – vereint durch die Leidenschaft für Data Science.</p>
+    <div class="reveal">
+      <p class="s-eyebrow">Die Autoren</p>
+      <h2 class="s-title">Vier Stimmen, eine Vision</h2>
+      <p class="s-body">Vier Expertinnen und Experten aus Wissenschaft und Praxis – vereint durch die Leidenschaft für Data Science und Big Data.</p>
     </div>
-
     <div class="authors-grid">
-      <div class="author-card reveal reveal-delay-1">
-        <div class="author-avatar" style="background: linear-gradient(135deg, #E87722, #C45F0A);">OH</div>
+      <div class="author-card reveal d1">
+        <div class="author-av" style="background:var(--orange);">OH</div>
         <div class="author-name">Oliver Hummel</div>
         <div class="author-role">Hochschule Mannheim</div>
         <a href="https://www.linkedin.com/in/oliver-hummel-hsma" target="_blank" class="author-link">
-          LinkedIn
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LinkedIn <i data-lucide="external-link"></i>
         </a>
       </div>
-
-      <div class="author-card reveal reveal-delay-2">
-        <div class="author-avatar" style="background: linear-gradient(135deg, #005B9A, #003D6B);">MK</div>
+      <div class="author-card reveal d2">
+        <div class="author-av" style="background:var(--blue);">MK</div>
         <div class="author-name">Marcus Kessel</div>
-        <div class="author-role">Softwareentwickler & Data Engineer</div>
+        <div class="author-role">Data Engineer</div>
         <a href="https://www.linkedin.com/in/marcus-kessel-307609312/" target="_blank" class="author-link">
-          LinkedIn
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LinkedIn <i data-lucide="external-link"></i>
         </a>
       </div>
-
-      <div class="author-card reveal reveal-delay-3">
-        <div class="author-avatar" style="background: linear-gradient(135deg, #3D7A56, #2A5A3D);">BN</div>
+      <div class="author-card reveal d3">
+        <div class="author-av" style="background:var(--green);">BN</div>
         <div class="author-name">Beate Navarro Bullock</div>
-        <div class="author-role">Data Science & Analytics</div>
+        <div class="author-role">Data Science &amp; Analytics</div>
         <a href="https://www.linkedin.com/in/beate-navarro-9326ba112/" target="_blank" class="author-link">
-          LinkedIn
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LinkedIn <i data-lucide="external-link"></i>
         </a>
       </div>
-
-      <div class="author-card reveal reveal-delay-4">
-        <div class="author-avatar" style="background: linear-gradient(135deg, #E87722, #005B9A);">RB</div>
+      <div class="author-card reveal d4">
+        <div class="author-av" style="background:linear-gradient(135deg,var(--orange),var(--blue));">RB</div>
         <div class="author-name">Robert Butscher</div>
-        <div class="author-role">Prof. · THWS Würzburg-Schweinfurt</div>
+        <div class="author-role">Prof. Dr. · THWS Würzburg-Schweinfurt</div>
         <a href="https://www.linkedin.com/in/prof-dr-robert-butscher-09a7481b1/" target="_blank" class="author-link">
-          LinkedIn
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LinkedIn <i data-lucide="external-link"></i>
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ CTA ═══════════════ -->
-<section id="cta">
-  <div class="cta-card reveal">
-    <p class="cta-eyebrow">Jetzt erhältlich</p>
-    <h2 class="cta-title">Bereit für<br>Big Data?</h2>
-    <p class="cta-body">
-      783 Seiten. 18 Kapitel. Lauffähiger Code. Moderner Stack.
-      Das Standardwerk für Data Science mit Big Data – komplett in Farbe.
-    </p>
-    <div class="cta-buttons">
-      <a href="https://www.hanser-fachbuch.de/fachbuch/artikel/9783446476400" target="_blank" class="btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+<!-- ══════════ BUY CTA ══════════ -->
+<section id="buy">
+  <div class="buy-inner">
+    <p class="buy-eye">Jetzt erhältlich</p>
+    <h2 class="buy-h2">Bereit für Big Data?</h2>
+    <p class="buy-sub">783 Seiten. 18 Kapitel. Lauffähiger Code. Moderner Stack. Das Standardwerk – komplett in Vollfarbe. E-Book beim Kauf inklusive.</p>
+    <div>
+      <a href="https://www.hanser-fachbuch.de/Data-Science-mit-Big-Data/978-3-446-47640-0"
+         target="_blank" class="btn-white">
+        <i data-lucide="shopping-bag"></i>
         Beim Hanser Verlag kaufen
       </a>
     </div>
     <div class="buy-links">
       <a href="https://www.amazon.de/Data-Science-mit-Big-Algorithmen/dp/3446476407" target="_blank" class="buy-link">Amazon</a>
-      <span class="buy-link-sep">·</span>
+      <span class="buy-sep">·</span>
       <a href="https://www.buecher.de/shop/home/artikeldetails/A1075047159" target="_blank" class="buy-link">Bücher.de</a>
-      <span class="buy-link-sep">·</span>
+      <span class="buy-sep">·</span>
       <span class="buy-link">ISBN 978-3-446-47640-0</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ GITHUB ═══════════════ -->
+<!-- ══════════ GITHUB ══════════ -->
 <section id="github">
   <div class="container">
-    <div class="story-intro reveal" style="text-align:left; max-width:100%; padding-bottom:0;">
-      <p class="section-eyebrow">Open Source</p>
-      <h2 class="section-title" style="font-size: clamp(28px,4vw,40px);">Code zum Mitmachen</h2>
-    </div>
-    <div class="github-card reveal">
-      <div class="github-info">
-        <div class="github-title">bigdatabuch/buch-beispiele</div>
-        <div class="github-desc">Alle Code-Beispiele aus dem Buch – lauffähig, kommentiert, kapitelweise sortiert. Python, Java, R und mehr.</div>
+    <div class="gh-row reveal">
+      <div>
+        <div class="gh-repo-label">Open Source · Code-Repository</div>
+        <div class="gh-title">bigdatabuch/buch-beispiele</div>
+        <div class="gh-desc">Alle Code-Beispiele aus dem Buch – lauffähig, kommentiert, kapitelweise sortiert. Python, Java, R und mehr. Direkt mit Docker und Google Colab ausführbar.</div>
       </div>
-      <a href="https://github.com/bigdatabuch/buch-beispiele" target="_blank" class="github-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      <a href="https://github.com/bigdatabuch/buch-beispiele" target="_blank" class="btn-dark">
+        <i data-lucide="github"></i>
         Zum Repository
       </a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ FOOTER ═══════════════ -->
+<!-- ══════════ FOOTER ══════════ -->
 <footer>
   <p class="footer-text">
-    © 2026 Oliver Hummel, Marcus Kessel, Beate Navarro Bullock, Robert Butscher ·
-    Carl Hanser Verlag München ·
+    © 2026 Hummel · Kessel · Navarro Bullock · Butscher &nbsp;·&nbsp; Carl Hanser Verlag München &nbsp;·&nbsp;
+    <a href="https://www.hanser-fachbuch.de/Data-Science-mit-Big-Data/978-3-446-47640-0" target="_blank">Verlagsseite</a>
+    &nbsp;·&nbsp;
     <a href="https://github.com/bigdatabuch/buch-beispiele" target="_blank">GitHub</a>
-    ·
-    <a href="https://www.hanser-fachbuch.de/fachbuch/artikel/9783446476400" target="_blank">Verlagsseite</a>
   </p>
 </footer>
 
-<!-- ══════════════════════════════════════════════
-   JAVASCRIPT
-══════════════════════════════════════════════ -->
+<!-- JAVASCRIPT -->
 <script>
-// ── Progress Bar ──────────────────────────────
-const bar = document.getElementById('progress-bar');
+// Init Lucide icons
+lucide.createIcons();
+
+// ── Progress bar
+const prog = document.getElementById('progress');
 window.addEventListener('scroll', () => {
-  const max = document.body.scrollHeight - window.innerHeight;
-  bar.style.width = (window.scrollY / max * 100) + '%';
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = pct + '%';
 }, { passive: true });
 
-// ── Nav Scroll Effect ─────────────────────────
+// ── Nav scroll effect
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 60);
+  nav.classList.toggle('scrolled', window.scrollY > 48);
 }, { passive: true });
 
-// ── Intersection Observer: Reveal ─────────────
-const revealObserver = new IntersectionObserver((entries) => {
+// ── IntersectionObserver: Reveal
+const revObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      revealObserver.unobserve(e.target);
-    }
+    if (e.isIntersecting) { e.target.classList.add('vis'); revObs.unobserve(e.target); }
   });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+}, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+// ── Chapters scrollytelling
+const chItems  = Array.from(document.querySelectorAll('.ch-item'));
+const cEye     = document.getElementById('c-eye');
+const cIcon    = document.getElementById('c-icon');
+const cTitle   = document.getElementById('c-title');
+const cDesc    = document.getElementById('c-desc');
+const cDots    = document.getElementById('c-dots');
 
-// ── Sticky Chapter Scroll Sync ─────────────────
-const chapterItems = document.querySelectorAll('.chapter-item');
-const iconEl = document.getElementById('chapter-icon');
-const numEl = document.getElementById('chapter-num');
-const nameEl = document.getElementById('chapter-name');
-const glowEl = document.getElementById('chapter-glow');
+// Build dots
+chItems.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'ch-dot' + (i === 0 ? ' on' : '');
+  d.dataset.idx = i;
+  cDots.appendChild(d);
+});
 
-// Chapter icons map
-const chapterIcons = ['🌐','🗄️','🏛️','🔧','⚡','🧮','📊','🚀','🤖'];
+function updateSticky(item, idx) {
+  // Fade icon
+  cIcon.style.opacity = '0'; cIcon.style.transform = 'scale(0.85)';
+  cTitle.style.opacity = '0';
+  setTimeout(() => {
+    // Icon swap
+    cIcon.innerHTML = '';
+    const svgEl = document.createElement('i');
+    svgEl.setAttribute('data-lucide', item.dataset.icon || 'database');
+    cIcon.appendChild(svgEl);
+    lucide.createIcons();
 
-const chapterObserver = new IntersectionObserver((entries) => {
+    cEye.textContent   = item.dataset.eye || '';
+    cTitle.textContent = item.dataset.title || '';
+    cDesc.textContent  = item.dataset.desc || '';
+
+    cIcon.style.opacity = '1'; cIcon.style.transform = 'scale(1)';
+    cTitle.style.opacity = '1';
+  }, 140);
+
+  // Update dots
+  cDots.querySelectorAll('.ch-dot').forEach((d, i) => {
+    d.classList.toggle('on', i === idx);
+  });
+}
+
+const chObs = new IntersectionObserver(entries => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Deactivate all
-      chapterItems.forEach(item => item.classList.remove('active'));
-      // Activate current
-      entry.target.classList.add('active');
+    if (!entry.isIntersecting) return;
+    const idx = chItems.indexOf(entry.target);
+    if (idx < 0) return;
 
-      // Update sticky display
-      const icon = entry.target.dataset.icon || '📊';
-      const color = entry.target.dataset.color || '#E87722';
-      const num = entry.target.dataset.num || '';
-      const name = entry.target.dataset.name || '';
-
-      // Animate transition
-      iconEl.style.opacity = '0';
-      iconEl.style.transform = 'scale(0.8)';
-      setTimeout(() => {
-        iconEl.textContent = icon;
-        numEl.textContent = num;
-        nameEl.textContent = name;
-        glowEl.style.background = color;
-        iconEl.style.opacity = '1';
-        iconEl.style.transform = 'scale(1)';
-      }, 150);
-
-      iconEl.style.transition = 'opacity 0.15s, transform 0.15s';
-    }
+    chItems.forEach(it => it.classList.remove('on'));
+    entry.target.classList.add('on');
+    updateSticky(entry.target, idx);
   });
 }, {
-  threshold: 0.4,
-  rootMargin: '-20% 0px -20% 0px'
+  threshold: 0.45,
+  rootMargin: '-15% 0px -15% 0px'
 });
-
-chapterItems.forEach(item => chapterObserver.observe(item));
-
-// ── Smooth appearance on load ─────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Small delay before allowing scroll-based animations
-  setTimeout(() => {
-    document.body.style.opacity = '1';
-  }, 100);
-});
+chItems.forEach(it => chObs.observe(it));
 </script>
 
 </body>
